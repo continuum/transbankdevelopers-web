@@ -1,0 +1,6 @@
+[submodule "tbkdev_3.0-public"]
+	path = tbkdev_3.0-public
+	url = git@github.com:continuum/cumbre-tbkdev_3.0-public.git
+[submodule "slate-tbk"]
+	path = slate-tbk
+	url = git@github.com:continuum/cumbre-slate-tbk.git
