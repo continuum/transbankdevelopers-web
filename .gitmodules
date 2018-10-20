@@ -4,3 +4,6 @@
 [submodule "slate-tbk"]
 	path = slate-tbk
 	url = git@github.com:continuum/cumbre-slate-tbk.git
+[submodule "transbank-developers-docs"]
+	path = transbank-developers-docs
+	url = git@github.com:TransbankDevelopers/transbank-developers-docs.git
