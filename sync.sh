@@ -1,0 +1,82 @@
+#!/bin/bash
+set -o nounset
+set -o pipefail
+set -o errexit
+
+# User for automated commits/merges:
+git config user.email "transbankdevelopers@continuum.cl"
+git config user.name "Transbank Developers Automated Scripts"
+
+# Lets's get to work. First, make sure we are working with the latest repos:
+git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/ \
+  transbank-developers-docs/
+git diff --exit-code || git commit -am "Update submodules" 
+git push
+
+# Then let's make sure we have the latest changes from cumbre:
+for repo in slate-tbk tbkdev_3.0-public; do
+  cd "$repo"
+  git config user.email "transbankdevelopers@continuum.cl"
+  git config user.name "Transbank Developers Automated Scripts"
+  git fetch origin
+  git remote add -f cumbre "https://github.com/Cumbre/$repo.git" || \
+    git fetch cumbre
+  git merge --no-edit cumbre/master
+  git push origin master
+  cd ..
+done
+
+# Alright, everything in sync. Now let's move files around:
+cp -a transbank-developers-docs/images/* slate-tbk/source/images/
+cp -a transbank-developers-docs/{producto,documentacion,referencia,plugin} \
+  slate-tbk/source/includes/
+
+# And update the slate-tbk thing:
+DEV_DOCS_HEAD="$(cd transbank-developers-docs/; git log --pretty=format:'%h' -n 1)"
+cd slate-tbk
+git checkout -b transbank-developers-docs origin/transbank-developers-docs
+for f in $(find source/includes -name "README.md"); do 
+  # Take README.md
+  cat "$f" | \
+    # Put {{dir}} on markdown links:
+    sed -e 's/\](\//\]({{dir}}\//g' | \
+    # Put {{dir}} on HTML links with single quotes
+    sed -e 's/='\''\//='\''{{dir}}\//g' | \
+    # Put {{dir}} on HTML links with double quotes 
+    sed -e 's/="\//="{{dir}}\//g' | \
+    # and put the output on index.md
+    cat > "${f/README/index}"
+  rm "$f" # the original README.md is no longer needed nor wanted
+done
+git add -A 
+git diff --cached --exit-code || \
+  git commit -m "Update from transbank-developers-docs $DEV_DOCS_HEAD"
+git push origin transbank-developers-docs
+# Now let's see if the changes coming from the docs repo are compatible with 
+# any changes coming from the cumbre repo. Master is the integration point here
+git checkout master
+git merge --no-edit transbank-developers-docs
+# If it went well, we can push and continue:
+git push cumbre master
+git push origin master
+SLATE_HEAD="$(git log --pretty=format:'%h' -n 1)"
+cd ..
+
+# If we have survived this far, we can build the docs into the
+# tbkdev_3.0-public thing (which is not the real site but is close enough for
+# previewing)
+cd tbkdev_3.0-public; git checkout -b slate-tbk origin/slate-tbk; cd ..
+cd slate-tbk; npm install; ./build-all.sh ; cd ..
+cd tbkdev_3.0-public
+git add -A 
+git diff --cached --exit-code || \
+  git commit -m "Update from slate-tbk $SLATE_HEAD"
+git push origin slate-tbk
+# Finally, lets merge the slate-generated files into the website (if possible)
+git checkout master
+git merge --no-edit slate-tbk
+git push cumbre master
+git push origin master
+cd ..
+
+# And we are done :)
