@@ -7,11 +7,16 @@ set -o errexit
 git config user.email "transbankdevelopers@continuum.cl"
 git config user.name "Transbank Developers Automated Scripts"
 
-# Lets's get to work. First, make sure we are working with the latest repos:
-git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/ \
-  transbank-developers-docs/
-git diff --exit-code || git commit -am "Update submodules" 
-git push
+# Lets's get to work. First, make sure we are working with the latest repos 
+# downstream:
+git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/
+if ! git diff --exit-code; then
+  git commit -am "Update downstream slate and web"
+  git push
+  echo "New commits have been pushed by this script due to incoming changes"
+  echo "Syncing will continue on the next run"
+  exit
+fi
 
 # Then let's make sure we have the latest changes from cumbre:
 for repo in slate-tbk tbkdev_3.0-public; do
@@ -25,8 +30,26 @@ for repo in slate-tbk tbkdev_3.0-public; do
   git push origin master
   cd ..
 done
+git submodule update --remote slate-tbk/ tbkdev_3.0-public/
+if ! git diff --exit-code; then
+  git commit -am "Sync with downstream slate or web changes"
+  git push
+  echo "New commits have been pushed by this script due to incoming changes"
+  echo "Syncing will continue on the next run"
+  exit
+fi
 
-# Alright, everything in sync. Now let's move files around:
+# And now check if we have pending changes upstream:
+git submodule update --init --remote transbank-developers-docs/
+if ! git diff --exit-code; then
+  git commit -am "Update upstream docs"
+  git push
+  echo "New commits have been pushed by this script due to incoming changes"
+  echo "Syncing will continue on the next run"
+  exit
+fi
+
+# Alright, everything was in sync. Now let's move files around:
 cp -a transbank-developers-docs/images/* slate-tbk/source/images/
 cp -a transbank-developers-docs/{producto,documentacion,referencia,plugin} \
   slate-tbk/source/includes/
