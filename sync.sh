@@ -27,6 +27,7 @@ for repo in slate-tbk tbkdev_3.0-public; do
   git fetch origin
   git remote add -f cumbre "https://github.com/Cumbre/$repo.git" || \
     git fetch cumbre
+  git checkout master
   git merge --no-edit cumbre/master
   git push origin master
   cd ..
