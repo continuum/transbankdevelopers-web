@@ -2,6 +2,7 @@
 set -o nounset
 set -o pipefail
 set -o errexit
+set -o xtrace
 
 # User for automated commits/merges:
 git config user.email "transbankdevelopers@continuum.cl"
