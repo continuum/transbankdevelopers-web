@@ -34,7 +34,7 @@ for repo in slate-tbk tbkdev_3.0-public; do
 done
 git submodule update --remote slate-tbk/ tbkdev_3.0-public/
 if ! git diff --exit-code; then
-  git commit -am "Sync with downstream slate or web changes"
+  git commit -am "Sync with downstream slate or web changes from cumbre"
   git push
   echo "New commits have been pushed by this script due to incoming changes"
   echo "Syncing will continue on the next run"
