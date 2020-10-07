@@ -1,9 +1,9 @@
 [submodule "tbkdev_3.0-public"]
 	path = tbkdev_3.0-public
-	url = https://github.com/continuum/cumbre-tbkdev_3.0-public.git
+	url = git@github.com:continuum/cumbre-tbkdev_3.0-public.git
 [submodule "slate-tbk"]
 	path = slate-tbk
-	url = https://github.com/continuum/cumbre-slate-tbk.git
+	url = git@github.com:continuum/cumbre-slate-tbk.git
 [submodule "transbank-developers-docs"]
 	path = transbank-developers-docs
-	url = https://github.com/TransbankDevelopers/transbank-developers-docs.git
+	url = git@github.com:TransbankDevelopers/transbank-developers-docs.git
