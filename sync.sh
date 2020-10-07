@@ -11,12 +11,6 @@ git config user.name "Transbank Developers Automated Scripts"
 # Lets's get to work. First, make sure we are working with the latest repos 
 # downstream:
 git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/
-# Git initializes submodules using HTTPS which asks for user/password
-# Let's change it to SSH instead
-perl -i -p -e 's|https://(.*?)/|git@\1:|g' .gitmodules
-perl -i -p -e 's|https://(.*?)/|git@\1:|g' .git/config
-git submodule sync --recursive
-
 if ! git diff --exit-code; then
   git commit -am "Update downstream slate and web"
   git push
