@@ -8,6 +8,11 @@ set -o xtrace
 git config user.email "transbankdevelopers@continuum.cl"
 git config user.name "Transbank Developers Automated Scripts"
 
+# Git initializes submodules using HTTPS which asks for user/password
+# Let's change it to SSH instead
+perl -i -p -e 's|https://(.*?)/|git@\1:|g' .gitmodules
+perl -i -p -e 's|https://(.*?)/|git@\1:|g' .git/config
+
 # Lets's get to work. First, make sure we are working with the latest repos 
 # downstream:
 git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/
