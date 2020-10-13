@@ -15,7 +15,7 @@ perl -i -p -e 's|https://(.*?)/|git@\1:|g' .git/config
 
 # Lets's get to work. First, make sure we are working with the latest repos 
 # downstream:
-git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/
+git submodule update --init --remote slate-tbk/ tbkdev_3.0-public/ transbank-developers-docs/
 if ! git diff --exit-code; then
   git commit -am "Update downstream slate and web"
   git push
@@ -47,7 +47,6 @@ if ! git diff --exit-code; then
 fi
 
 # And now check if we have pending changes upstream:
-git submodule update --init --remote transbank-developers-docs/
 if ! git diff --exit-code; then
   git commit -am "Update upstream docs"
   git push
