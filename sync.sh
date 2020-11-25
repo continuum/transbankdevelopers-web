@@ -95,7 +95,7 @@ cd ..
 # If we have survived this far, we can build the docs into the
 # tbkdev_3.0-public thing (which is not the real site but is close enough for
 # previewing)
-cd tbkdev_3.0-public; git checkout -b slate-tbk origin/slate-tbk; cd ..
+cd tbkdev_3.0-public; git checkout slate-tbk; git pull; cd ..
 cd slate-tbk; npm install; ./build-all.sh ; cd ..
 cd tbkdev_3.0-public
 git add -A 
