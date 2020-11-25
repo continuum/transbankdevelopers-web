@@ -64,6 +64,7 @@ cp -a transbank-developers-docs/{producto,documentacion,referencia,plugin} \
 DEV_DOCS_HEAD="$(cd transbank-developers-docs/; git log --pretty=format:'%h' -n 1)"
 cd slate-tbk
 git checkout transbank-developers-docs
+git pull
 for f in $(find source/includes -name "README.md"); do 
   # Take README.md
   cat "$f" | \
