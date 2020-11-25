@@ -63,7 +63,7 @@ cp -a transbank-developers-docs/{producto,documentacion,referencia,plugin} \
 # And update the slate-tbk thing:
 DEV_DOCS_HEAD="$(cd transbank-developers-docs/; git log --pretty=format:'%h' -n 1)"
 cd slate-tbk
-git checkout -b transbank-developers-docs origin/transbank-developers-docs
+git checkout transbank-developers-docs
 for f in $(find source/includes -name "README.md"); do 
   # Take README.md
   cat "$f" | \
