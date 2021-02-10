@@ -92,21 +92,4 @@ git push origin master
 SLATE_HEAD="$(git log --pretty=format:'%h' -n 1)"
 cd ..
 
-# If we have survived this far, we can build the docs into the
-# tbkdev_3.0-public thing (which is not the real site but is close enough for
-# previewing)
-cd tbkdev_3.0-public; git checkout slate-tbk; git pull; cd ..
-cd slate-tbk; npm install; ./build-all.sh ; cd ..
-cd tbkdev_3.0-public
-git add -A 
-git diff --cached --exit-code || \
-  git commit -m "Update from slate-tbk $SLATE_HEAD"
-git push origin slate-tbk
-# Finally, lets merge the slate-generated files into the website (if possible)
-git checkout master
-git merge --no-edit slate-tbk
-git push cumbre master
-git push origin master
-cd ..
-
 # And we are done :)
